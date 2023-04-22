@@ -22,9 +22,31 @@ const notificationOptions = {
 
 export class App extends Component {
   state = {
-    contacts: initialContacts,
+    contacts: [],
     filter: '',
   };
+
+  // стадія монтування
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    // перевірка localStorage
+    if (savedContacts !== null) {
+      const parsedContacts = JSON.parse(savedContacts);
+      this.setState({ contacts: parsedContacts });
+      return;
+    }
+    // запис данних в localStorage при першому завантаженні сторінки
+    this.setState({ contacts: initialContacts });
+  }
+
+  // стадія оновлення
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      // console.log(this.state.contacts); // поточне значення
+      // console.log(prevState.contacts); // попереднє значення
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = newContact => {
     // перевірка на існуюче ім'я контакту
@@ -60,9 +82,13 @@ export class App extends Component {
 
   render() {
     const normalizeFilter = this.state.filter.toLocaleLowerCase();
-    const visibleContacts = this.state.contacts.filter(contact =>
-      contact.name.toLocaleLowerCase().includes(normalizeFilter)
-    );
+    const visibleContacts = this.state.contacts
+      .filter(contact =>
+        contact.name.toLocaleLowerCase().includes(normalizeFilter)
+      )
+      .sort((firstName, secondName) =>
+        firstName.name.localeCompare(secondName.name)
+      );
 
     return (
       <Layout>
