@@ -10,7 +10,7 @@ export const ContactList = ({ items, onDelete }) => {
         <Item key={item.id}>
           <span>{item.name}</span>
           <span>{item.number}</span>
-          <ListBtnDel onClick={()=>onDelete(item.id)}><FaUserMinus/></ListBtnDel>
+          <ListBtnDel onClick={()=>onDelete(item.id)}><FaUserMinus size="16"/></ListBtnDel>
         </Item>
       ))}
     </List>
