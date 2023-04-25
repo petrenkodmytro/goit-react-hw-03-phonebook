@@ -20,6 +20,8 @@ const notificationOptions = {
   theme: 'dark',
 };
 
+// render > didMount > getItem > setState > update > render > didUpdate > setItem
+
 export class App extends Component {
   state = {
     contacts: [],
@@ -29,13 +31,13 @@ export class App extends Component {
   // стадія монтування
   componentDidMount() {
     const savedContacts = localStorage.getItem('contacts');
-    // перевірка localStorage
+     // Если сохранили в LS уже что-то, пишем ЭТО в state
     if (savedContacts !== null) {
       const parsedContacts = JSON.parse(savedContacts);
       this.setState({ contacts: parsedContacts });
       return;
     }
-    // запис данних в localStorage при першому завантаженні сторінки
+     // Если в LS ничего еще нет, пишем в state initialRecipes
     this.setState({ contacts: initialContacts });
   }
 
